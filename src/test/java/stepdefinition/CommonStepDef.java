@@ -33,23 +33,5 @@ public class CommonStepDef extends BaseClass {
         }
     }
 
-    @When("I hit an api")
-    public void iHitAnApi(Map<String, String> table) {
-        try{
-            if(Objects.nonNull(requestSpecification)){
-                String endpoint;
-                if (table.get("pathParam") != null) {
-                    endpoint = table.get("endpoint") + "/" + table.get("pathParam");  //  contacts/null
-                } else {
-                    endpoint = table.get("endpoint");
-                }
-//        hitApi(requestSpecification,table.get("httpMethod"), endpoint);
-                response = requestSpecification.post(endpoint);
-                response.prettyPrint();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
 
-    }
 }

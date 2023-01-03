@@ -56,6 +56,28 @@ Feature: Verify contact functionality
       | sfedgef          | false | 400        |
 
 
+  Scenario: Verify missing email ids in contacts
+    Given I prepare request structure to get the contact
+      | username | apitesting@yopmail.com     |
+      | password | jabhmj91tibtjpsnijbs63lere |
+      | header   | Accept:application/json    |
+    When I hit an api
+      | endpoint   | contacts |
+      | pathParam  |          |
+      | httpMethod | GET      |
+    Then I verify missing email ids in contact
+
+  @GetAllContacts
+  Scenario: Get contact information who is not associated with company
+    Given I prepare request structure to get the contact
+      | username | apitesting@yopmail.com     |
+      | password | jabhmj91tibtjpsnijbs63lere |
+      | header   | Accept:application/json    |
+    When I hit an api
+      | endpoint   | contacts |
+      | pathParam  |          |
+      | httpMethod | GET      |
+    Then I print all contact info who is not associated to company
 
 
 
