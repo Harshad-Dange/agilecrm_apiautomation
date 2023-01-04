@@ -6,6 +6,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 
 import java.util.List;
 import java.util.Map;
@@ -53,13 +54,7 @@ public class SampleStepDef {
 
     }
 
-    @Then("I verify the contact is created successfully")
-    public void verifyContact(Map<String, String> contactData) {
-        System.out.println("verify contact method");
-        contactData.forEach((key, val) -> {
-            System.out.println(key + " : " + val);
-        });
-    }
+
 
     @And("I create company in the system")
     public void iCreateCompanyInTheSystem(List<String> testData) {

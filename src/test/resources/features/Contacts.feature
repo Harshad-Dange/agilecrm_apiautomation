@@ -1,5 +1,6 @@
 Feature: Verify contact functionality
 
+  @GetAllContacts
   Scenario Outline: Verify create contact feature
     Given I create request structure to create contact
       | type      | <type>      |
@@ -67,7 +68,7 @@ Feature: Verify contact functionality
       | httpMethod | GET      |
     Then I verify missing email ids in contact
 
-  @GetAllContacts
+
   Scenario: Get contact information who is not associated with company
     Given I prepare request structure to get the contact
       | username | apitesting@yopmail.com     |
