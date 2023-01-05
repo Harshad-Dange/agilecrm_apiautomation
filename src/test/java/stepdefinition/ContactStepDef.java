@@ -12,17 +12,14 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class ContactStepDef extends BaseClass {
 
     RequestSpecification requestSpecification;
     Response response;
     Long id;
-
+    String email= null;
     @Given("I prepare request structure to get the contact")
     public void iPrepareRequestStructureToGetTheContact(Map<String, String> table) {
         //RequestSpecification --> is a interface
@@ -136,30 +133,30 @@ public class ContactStepDef extends BaseClass {
 
     @Given("I create request structure to create contact")
     public void iCreateRequestStructureToCreateContact(Map<String, String> table) {
-
-        String body =" firstName ="+ table.get("firstName") + " lastName" + table.get("lastName");
+        if(table.get("email").equals("valid")){
+            Utility utility=new Utility();
+             email=utility.generateRandomEmail(15);
+        }
         String requestBody = "{\n" +
                 "    \"star_value\": \"4\",\n" +
                 "    \"lead_score\": \"92\",\n" +
-                "    \"tags\": [\n" +
-                "        \"API_Tag\"\n" +
-                "    ],\n" +
+                "    \"tags\": [ ],\n" +
                 "    \"properties\": [\n" +
                 "        {\n" +
                 "            \"type\": \"SYSTEM\",\n" +
                 "            \"name\": \"first_name\",\n" +
-                "            \"value\": \"API\"\n" +
+                "            \"value\": \"" + table.get("firstName") + "\"\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"type\": \"SYSTEM\",\n" +
                 "            \"name\": \"last_name\",\n" +
-                "            \"value\": \"Automation\"\n" +
+                "            \"value\": \"" + table.get("lastName") + "\"\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"type\": \"SYSTEM\",\n" +
                 "            \"name\": \"email\",\n" +
                 "            \"subtype\": \"work\",\n" +
-                "            \"value\": \"apiautomation55@yopmail.com\"\n" +
+                "            \"value\": \"" + email + "\"\n" +
                 "        }\n" +
                 "    ]\n" +
                 "}";
@@ -172,13 +169,11 @@ public class ContactStepDef extends BaseClass {
                 .auth().basic("apitesting@yopmail.com", "jabhmj91tibtjpsnijbs63lere")
                 .body(requestBody)
                 .log().all();
-
-
     }
 
-    @Then("I verify the contact is created successfully")
-    public void verifyContact(Map<String, String> contactData) {
-        Assert.assertEquals(200, response.statusCode());
+    @Then("I verify the create contact api response using {int}")
+    public void verifyContact(int statusCode, Map<String, String> contactData) {
+        Assert.assertEquals(statusCode, response.statusCode());
         response.prettyPrint();
         id = response.jsonPath().get("id");
         Assert.assertTrue(Objects.nonNull(id));
@@ -192,14 +187,14 @@ public class ContactStepDef extends BaseClass {
 
     @And("I verify newly created contact in  get by id api")
     public void iVerifyNewlyCreatedContactInGetByIdApi(DataTable table) {
-        requestSpecification=RestAssured.given();
+        requestSpecification = RestAssured.given();
         requestSpecification.baseUri("https://webtesting.agilecrm.com")
                 .basePath("/dev/api")
                 .header("Accept", ContentType.JSON)
                 .auth().basic("apitesting@yopmail.com", "jabhmj91tibtjpsnijbs63lere")
                 .log()
                 .all();
-        response=requestSpecification.get("/contacts/"+ id);
+        response = requestSpecification.get("/contacts/" + id);
         Assert.assertEquals(200, response.statusCode());
         response.prettyPrint();
         Assert.assertEquals(id, response.jsonPath().get("id"));

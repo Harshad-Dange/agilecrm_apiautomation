@@ -10,7 +10,7 @@ Feature: Verify contact functionality
       | lastName  | <lastName>  |
       | email     | <email>     |
     When I hit create contact api
-    Then I verify the contact is created successfully
+    Then I verify the create contact api response using <statusCode>
       | type      | <type>      |
       | source    | <source>    |
       | tags      | <tags>      |
@@ -27,13 +27,13 @@ Feature: Verify contact functionality
       | email     | <email>     |
       | valid     | <valid>     |
     Examples:
-      | valid | type   | source | tags         | firstName | lastName   | email        |
-      | true  | PERSON | manual | sanity,smoke | API       | Automation | api@test.com |
-      | false | XYZ    | manual | sanity,smoke | API       | Automation | api@test.com |
-      | false | PERSON | manual | sanity,smoke |           | Automation | api@test.com |
-      | false | XYZ    | manual | sanity,smoke | API       |            | api@test.com |
-      | false | XYZ    | manual | sanity,smoke | API       | Automation | api@test.com |
-      | false | XYZ    | manual | sanity,smoke | API       | Automation |              |
+      | valid | type   | source | tags         | firstName   | lastName   | email   | statusCode |
+      | true  | PERSON | manual | sanity,smoke | RestAssured | Automation | valid   | 200        |
+      | false | PERSON | manual | sanity,smoke |             | Automation | valid   | 500        |
+      | false | PERSON | manual | sanity,smoke | API         |            | valid   | 500        |
+      | false | XYZ    | manual | sanity,smoke |             |            | valid   | 500        |
+      | false | XYZ    | manual | sanity,smoke |             | Automation | invalid | 500        |
+      | false | XYZ    | manual | sanity,smoke |             |            | invalid | 500        |
 
   @GetContact
   Scenario Outline: Verify get contact api
