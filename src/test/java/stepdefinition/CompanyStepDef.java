@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 public class CompanyStepDef extends BaseClass {
-    RequestSpecification requestSpecification;
-    Response response;
+//    RequestSpecification requestSpecification;
+//    Response response;
     @Given("I prepare request structure for get company")
     public void prepareCompReqStructure(Map<String, String> table) {
         RestAssured.useRelaxedHTTPSValidation();

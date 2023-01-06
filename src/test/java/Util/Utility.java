@@ -1,8 +1,7 @@
 package Util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.sql.Struct;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class Utility {
@@ -34,6 +33,18 @@ public class Utility {
         String randomEmail= randomNum+ "@yopmail.com";
         System.out.println(randomNum);
         return randomEmail;
+    }
+
+    public List<Integer> setContactListForDeal(Map<String, String> data){
+        List<Integer> contactIdList = new ArrayList<>();
+        if (Objects.nonNull(data.get("contactIds"))) {
+            String[] contactIds = data.get("contactIds").split(",");
+            for (String id : contactIds) {
+                int contactId = Integer.parseInt(id);
+                contactIdList.add(contactId);
+            }
+        }
+        return  contactIdList;
     }
 
 }

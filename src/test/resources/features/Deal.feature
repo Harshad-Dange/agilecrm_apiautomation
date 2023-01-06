@@ -1,0 +1,28 @@
+Feature: Verify deal feature
+
+  @CreateDeal
+  Scenario Outline: verify create deal api
+    Given I prepare request structure to create deal
+      | name   | expectedValue   | probability   | milestone   | contactIds   | customData   |
+      | <name> | <expectedValue> | <probability> | <milestone> | <contactIds> | <customData> |
+    When I hit an api to create deal
+    Then I verify deal created successfully using "<statusCode>"
+      | name   | expectedValue   | probability   | milestone   | contactIds   | customData   |
+      | <name> | <expectedValue> | <probability> | <milestone> | <contactIds> | <customData> |
+    Examples:
+      | name  | expectedValue | probability | milestone | contactIds     | customData     | statusCode |
+      | Deal2 | 500.0f        | 100         | Won       |                | Group Size, 10 | 200        |
+      |       | 500.0f        | 100         | Won       |                | Group Size, 10 | 200        |
+      | Deal2 | 68767         | 100         | Won       |                | Group Size, 10 | 200        |
+      | Deal2 | 500.0f        | 100         | test      |                | Group Size, 10 | 200        |
+      | Deal2 | 500.0f        | 100         | Won       | 58758,78585    | Group Size, 10 | 200        |
+      | Deal2 | 500.0f        | 100         | Won       |                |                | 200        |
+      | Deal2 | 500.0f        | 1000        | Won       |                |                | 200        |
+      | Deal2 | 500.0f        | -10         | Won       |                |                | 200        |
+      | Deal2 | 500.0f        | -10         |           |                |                | 400        |
+      | Deal2 | 500.0f        | true        | Won       |                | Group Size, 10 | 400        |
+      | Deal2 | 500.0f        | 100         | Won       | dysdt,sajdfjsa | Group Size, 10 | 400        |
+      | Deal2 | test          | 100         | Won       |                | Group Size, 10 | 400        |
+      |       |               |             |           |                |                | 400        |
+      | Deal2 | 500.0f        | 100         | 13243     |                | Group Size, 10 | 200        |
+      | Deal2 | 500.0f        | 100f        | Won       |                | Group Size, 10 | 400        |

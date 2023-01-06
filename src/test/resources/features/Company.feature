@@ -11,3 +11,4 @@ Feature: Verify company module
       | endpoint   | companies/list |
       | httpMethod | POST           |
     Then I verify the company list api response
+
