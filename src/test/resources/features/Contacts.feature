@@ -81,6 +81,15 @@ Feature: Verify contact functionality
     Then I print all contact info who is not associated to company
 
 
+    @SearchContact
+    Scenario: Search contact information
+      Given I prepare request structure to search contact
+      When I hit an api
+        | endpoint   | search |
+        | queryParam | q:cyber,type:PERSON |
+        | httpMethod | GET      |
+      Then I verify the contact should be listed in the response
+
 
 
 

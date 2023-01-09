@@ -41,10 +41,20 @@ public class ContactStepDef extends BaseClass {
     public void iHitAnApi(Map<String, String> table) {
         try {
             ContactStepDef contactStepDef = new ContactStepDef();
-            String endpoint;
+            String endpoint = null;
             if (table.get("pathParam") != null) {
                 endpoint = table.get("endpoint") + "/" + table.get("pathParam");  //  contacts/{id}
-            } else {
+            } else if(table.get("queryParam")!=null) {
+                String [] params =table.get("queryParam").split(",") ;   // q:cyber,type:PERSON
+                Map<String, String > queryParam = new HashMap<>();
+                for(String param :params){
+                    //param = q:cyber
+                   String[] query= param.split(":");
+                   queryParam.put(query[0], query[1]);
+                }
+                requestSpecification.queryParams(queryParam);
+                endpoint = table.get("endpoint");
+            }else {
                 endpoint = table.get("endpoint"); //contacts/
             }
             //get the http method from feature file
@@ -198,5 +208,23 @@ public class ContactStepDef extends BaseClass {
         Assert.assertEquals(200, response.statusCode());
         response.prettyPrint();
         Assert.assertEquals(id, response.jsonPath().get("id"));
+    }
+
+    @Given("I prepare request structure to search contact")
+    public void iPrepareRequestStructureToSearchContact() {
+        RestAssured.useRelaxedHTTPSValidation();
+        requestSpecification = RestAssured.given();
+        requestSpecification.baseUri("https://webtesting.agilecrm.com")
+                .basePath("/dev/api")
+                .header("Accept", ContentType.JSON)
+                .auth().basic("apitesting@yopmail.com", "jabhmj91tibtjpsnijbs63lere")
+                .log()
+                .all();
+
+
+    }
+
+    @Then("I verify the contact should be listed in the response")
+    public void iVerifyTheContactShouldBeListedInTheResponse() {
     }
 }

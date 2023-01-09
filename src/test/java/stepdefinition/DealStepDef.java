@@ -122,7 +122,6 @@ public class DealStepDef {
             Assert.assertEquals(dealBody.get("milestone"), response.jsonPath().get("milestone"));
             Assert.assertEquals(dealBody.get("contact_ids"), response.jsonPath().getList("contacts"));
             Assert.assertEquals(dealBody.get("custom_data"), response.jsonPath().getList("custom_data"));
-
         }
        }
 }
