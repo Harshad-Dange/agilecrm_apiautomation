@@ -119,11 +119,11 @@ public class DealStepDef {
         response.prettyPrint();
         if (response.statusCode() == 200) {
             Assert.assertEquals(dealDto.getName(), response.jsonPath().get("name"));
-            Assert.assertEquals(dealDto.getExpectedValue(), response.jsonPath().get("expected_value"));
+            Assert.assertEquals(dealDto.getExpected_value(), response.jsonPath().get("expected_value"));
             Assert.assertEquals(dealDto.getProbability(), response.jsonPath().get("probability"));
             Assert.assertEquals(dealDto.getMilestone(), response.jsonPath().get("milestone"));
-            Assert.assertEquals(dealDto.getContactIds(), response.jsonPath().getList("contacts"));
-            Assert.assertEquals(dealDto.getCustomData(), response.jsonPath().getList("custom_data"));
+            Assert.assertEquals(dealDto.getContact_ids(), response.jsonPath().getList("contacts"));
+            Assert.assertEquals(dealDto.getCustom_data(), response.jsonPath().getList("custom_data"));
 
            /* Assert.assertEquals(dealBody.get("name"), response.jsonPath().get("name"));
             Assert.assertEquals(dealBody.get("expected_value"), response.jsonPath().get("expected_value"));
