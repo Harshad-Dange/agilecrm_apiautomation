@@ -35,16 +35,28 @@ public class Utility {
         return randomEmail;
     }
 
-    public List<Integer> setContactListForDeal(Map<String, String> data){
-        List<Integer> contactIdList = new ArrayList<>();
+    public List<Long> setContactListForDeal(Map<String, String> data){
+        List<Long> contactIdList = new ArrayList<>();
         if (Objects.nonNull(data.get("contactIds"))) {
             String[] contactIds = data.get("contactIds").split(",");
             for (String id : contactIds) {
-                int contactId = Integer.parseInt(id);
+                long contactId = Long.parseLong(id);
                 contactIdList.add(contactId);
             }
         }
         return  contactIdList;
     }
 
+    public List<Map<String, String>> setCustomDataForDeal(Map<String, String> data){
+        //prepare custom data object
+        List<Map<String, String>> customData = new ArrayList<>();
+        Map<String, String> customDataObj = new HashMap<>();
+        if (Objects.nonNull(data.get("customData"))) {
+            String[] dataObject = data.get("customData").split(",");
+            customDataObj.put("name", dataObject[0]);
+            customDataObj.put("value", dataObject[1]);
+            customData.add(customDataObj);
+        }
+        return customData;
+    }
 }

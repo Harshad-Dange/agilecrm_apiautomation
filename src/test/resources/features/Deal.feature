@@ -1,6 +1,6 @@
 Feature: Verify deal feature
 
-  @CreateDeal
+
   Scenario Outline: verify create deal api
     Given I prepare request structure to create deal
       | name   | expectedValue   | probability   | milestone   | contactIds   | customData   |
@@ -26,3 +26,29 @@ Feature: Verify deal feature
       |       |               |             |           |                |                | 400        |
       | Deal2 | 500.0f        | 100         | 13243     |                | Group Size, 10 | 200        |
       | Deal2 | 500.0f        | 100f        | Won       |                | Group Size, 10 | 400        |
+
+  @CreateDeal
+  Scenario: Serialization of create deal api
+    Given I prepare request structure to create deal using serialization concept
+      | name  | expectedValue | probability | milestone | contactIds | customData     | statusCode |
+      | Deal2 | 500           | 100         | Proposal  |            | Group Size, 10 | 200        |
+#    When I hit an api to create deal
+    Then I verify deal created successfully using "200"
+      | name  | expectedValue | probability | milestone | contactIds | customData     |
+      | Deal2 | 500.0f        | 100         | Proposal  |            | Group Size, 10 |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
