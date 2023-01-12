@@ -1,5 +1,7 @@
 package Util;
 
+import com.agilecrm.types.CustomDataDto;
+
 import java.sql.Struct;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -47,15 +49,20 @@ public class Utility {
         return  contactIdList;
     }
 
-    public List<Map<String, String>> setCustomDataForDeal(Map<String, String> data){
+    public List<CustomDataDto> setCustomDataForDeal(Map<String, String> data){
         //prepare custom data object
-        List<Map<String, String>> customData = new ArrayList<>();
-        Map<String, String> customDataObj = new HashMap<>();
+        List<CustomDataDto> customData = new ArrayList<>();
+
+        //Map<String, String> customDataObj = new HashMap<>();
+        CustomDataDto customDataDto= new CustomDataDto();
+
         if (Objects.nonNull(data.get("customData"))) {
             String[] dataObject = data.get("customData").split(",");
-            customDataObj.put("name", dataObject[0]);
-            customDataObj.put("value", dataObject[1]);
-            customData.add(customDataObj);
+            customDataDto.setName(dataObject[0]);
+            customDataDto.setValue(dataObject[1]);
+//            customDataObj.put("name", dataObject[0]);
+//            customDataObj.put("value", dataObject[1]);?
+            customData.add(customDataDto);
         }
         return customData;
     }

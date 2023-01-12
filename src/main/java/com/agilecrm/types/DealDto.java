@@ -13,7 +13,9 @@ public class DealDto {
     private int close_date;
     private String milestone;
     private List<Long> contact_ids;
-    private List<Map<String,String>> custom_data;
+//    private List<Map<String,String>> custom_data;
+private List<CustomDataDto> custom_data;
+
 
     public String getName() {
         return name;
@@ -63,11 +65,11 @@ public class DealDto {
         this.contact_ids = contact_ids;
     }
 
-    public List<Map<String, String>> getCustom_data() {
+    public List<CustomDataDto> getCustom_data() {
         return custom_data;
     }
 
-    public void setCustom_data(List<Map<String, String>> custom_data) {
+    public void setCustom_data(List<CustomDataDto> custom_data) {
         this.custom_data = custom_data;
     }
 }

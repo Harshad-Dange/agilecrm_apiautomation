@@ -92,6 +92,13 @@ Feature: Verify contact functionality
 
 
 
+      # Create Contact
+      #Verify create contact response
+      #get contact by id
+      #verify get contact by id api response with request body of create contact
+
+
+
 
 
 

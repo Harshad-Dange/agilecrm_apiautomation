@@ -1,6 +1,7 @@
 package stepdefinition;
 
 import Util.Utility;
+import com.agilecrm.types.CustomDataDto;
 import com.agilecrm.types.DealDto;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -145,11 +146,9 @@ public class DealStepDef {
         dealDto.setMilestone(dataTable.get("milestone"));
         dealDto.setClose_date(1455042600);
         List<Long> contactIds = utility.setContactListForDeal(dataTable);
-
         dealDto.setContact_ids(contactIds);
 
-        List<Map<String, String>> custom_data = utility.setCustomDataForDeal(dataTable);
-
+        List<CustomDataDto> custom_data = utility.setCustomDataForDeal(dataTable);
         dealDto.setCustom_data(custom_data);
 
         RestAssured.useRelaxedHTTPSValidation();

@@ -12,3 +12,9 @@ Feature: Verify company module
       | httpMethod | POST           |
     Then I verify the company list api response
 
+    @CreateCompany
+    Scenario: verify get by id api
+      Given I prepare request structure to create company
+      When I hit an api to get a company
+      Then I verify the company information retriving successfully in the response
+
