@@ -107,7 +107,7 @@ public class CompanyStepDef extends BaseClass {
                 .log().all();
 
         //Hit the api in gherkin language
-       given()
+       response= given()
                 .baseUri("")
                 .basePath("")
                 .header("", "")
@@ -115,8 +115,8 @@ public class CompanyStepDef extends BaseClass {
                 .auth().basic("", "")
                 .log().all()
         .when()
-                .post()
-        .then().statusCode(200);
+                .post();
+//        .then().statusCode(200);
 
 
         RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
@@ -139,8 +139,6 @@ public class CompanyStepDef extends BaseClass {
         requestSpecification=requestSpecBuilder.build();
 
 //        requestSpecification.spec(requestSpecification).post();
-
-
         requestSpecification.post();
     }
 
