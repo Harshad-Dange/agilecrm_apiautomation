@@ -29,6 +29,7 @@
 #      | phone_number | <phoneNum>  |
 #    Then I verify the contact is created successfully
 #      | first_name   | <firstName> |
+
 #      | last_name    | <lastName>  |
 #      | title        | <title>     |
 #      | email_id     | <email>     |

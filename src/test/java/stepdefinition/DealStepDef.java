@@ -3,6 +3,7 @@ package stepdefinition;
 import Util.Utility;
 import com.agilecrm.types.CustomDataDto;
 import com.agilecrm.types.DealDto;
+import com.agilecrm.types.DealResponseDto;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -152,7 +153,7 @@ public class DealStepDef {
         dealDto.setCustom_data(custom_data);
 
         RestAssured.useRelaxedHTTPSValidation();
-        requestSpecification= RestAssured.given();
+        requestSpecification = RestAssured.given();
         requestSpecification.baseUri("https://webtesting.agilecrm.com")
                 .basePath("/dev/api")
                 .header("Accept", ContentType.JSON)
@@ -160,8 +161,47 @@ public class DealStepDef {
                 .auth().basic("apitesting@yopmail.com", "jabhmj91tibtjpsnijbs63lere")
                 .body(dealDto)
                 .log().all();
-        response= requestSpecification.post("/opportunity");
+        response = requestSpecification.post("/opportunity");
     }
 
 
+    @Then("Verify api response using deserialization")
+    public void verifyApiResponseUsingDeserialization() {
+        response.prettyPrint();
+
+        // deserializing the response into the DealResponseDto (POJO class) class object
+        //   ClassName refVar= response.as(ClassName.class)
+        DealResponseDto dealResponseDto = response.as(DealResponseDto.class);
+
+        System.out.println(dealResponseDto.getId());
+
+        Assert.assertEquals(dealDto.getName(), dealResponseDto.getName());
+
+        Assert.assertTrue(Objects.nonNull(dealResponseDto.getId()));
+
+
+        Optional.of(dealDto.getExpected_value()).ifPresent(val -> {
+            Float expectValue = Float.parseFloat(val);
+            Float actualValue = Float.valueOf(String.valueOf(dealResponseDto.getExpected_value()));
+            Assert.assertEquals(expectValue, actualValue);
+        });
+        //get the custom data object from request body
+        CustomDataDto expectedCustomDataDto = dealDto.getCustom_data().get(0);
+        String expectedCustomDataName = expectedCustomDataDto.getName(); // get the name attribute value
+        String expectedCustomDataValue = expectedCustomDataDto.getValue(); // get the value attribute value
+
+        //get the custom data object from response body from deserialized object
+        CustomDataDto actualCustomDataDto = dealResponseDto.getCustom_data().get(0);
+        String actualCustomDataName =  actualCustomDataDto.getName();
+        String actualCustomDataValue = actualCustomDataDto.getValue();
+
+        // compare actual and expected custom data objects
+        Assert.assertEquals(expectedCustomDataName , actualCustomDataName);
+        Assert.assertEquals(expectedCustomDataValue, actualCustomDataValue);
+
+        System.out.println(dealResponseDto.getOwner().getId());
+        System.out.println(dealResponseDto.getOwner().getDomain());
+
+
+    }
 }
