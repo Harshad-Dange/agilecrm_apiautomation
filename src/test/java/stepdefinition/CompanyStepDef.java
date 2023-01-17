@@ -144,7 +144,7 @@ public class CompanyStepDef extends BaseClass {
 
     @When("I hit an api to get a company")
     public void iHitAnApiToGetACompany() {
-        response= requestSpecification.post("/contacts");
+        response= requestSpecification.get("/contacts");
         response.prettyPrint();
     }
 

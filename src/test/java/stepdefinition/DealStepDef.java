@@ -98,8 +98,8 @@ public class DealStepDef {
         customData.add(customDataValues);
         List<Long> contactIds= new ArrayList<>();*/
 
-//        RestAssured.useRelaxedHTTPSValidation();
-//        requestSpecification = RestAssured.given();
+        RestAssured.useRelaxedHTTPSValidation();
+        requestSpecification = RestAssured.given();
         requestSpecification.baseUri("https://webtesting.agilecrm.com")
                 .basePath("/dev/api")
                 .header("Accept", ContentType.JSON)
@@ -117,7 +117,7 @@ public class DealStepDef {
 
     @Then("I verify deal created successfully using {string}")
     public void iVerifyDealCreatedSuccessfully(String statusCode, DataTable table) {
-//        Assert.assertEquals(Integer.parseInt(statusCode), response.statusCode());
+        Assert.assertEquals(Integer.parseInt(statusCode), response.statusCode());
         response.prettyPrint();
         if (response.statusCode() == 200) {
             Assert.assertEquals(dealDto.getName(), response.jsonPath().get("name"));

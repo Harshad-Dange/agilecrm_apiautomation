@@ -14,6 +14,8 @@ import org.junit.Assert;
 
 import java.util.*;
 
+import static io.restassured.RestAssured.given;
+
 public class ContactStepDef extends BaseClass {
 
     RequestSpecification requestSpecification;
@@ -25,7 +27,7 @@ public class ContactStepDef extends BaseClass {
         //RequestSpecification --> is a interface
         //RestAssured--> class which is returining the reference of RequestSpecification
         RestAssured.useRelaxedHTTPSValidation();
-        requestSpecification = RestAssured.given();
+        requestSpecification = given();
         //RestAssured.baseURI ="https://webtesting.agilecrm.com";  // base uri setup
         //RestAssured.basePath="/dev/api/";
         String headers = table.get("header");  //Accept:application/json
@@ -171,7 +173,7 @@ public class ContactStepDef extends BaseClass {
                 "    ]\n" +
                 "}";
         RestAssured.useRelaxedHTTPSValidation();
-        requestSpecification = RestAssured.given();
+        requestSpecification = given();
         requestSpecification.baseUri("https://webtesting.agilecrm.com")
                 .basePath("/dev/api")
                 .header("Accept", ContentType.JSON)
@@ -197,7 +199,7 @@ public class ContactStepDef extends BaseClass {
 
     @And("I verify newly created contact in  get by id api")
     public void iVerifyNewlyCreatedContactInGetByIdApi(DataTable table) {
-        requestSpecification = RestAssured.given();
+        requestSpecification = given();
         requestSpecification.baseUri("https://webtesting.agilecrm.com")
                 .basePath("/dev/api")
                 .header("Accept", ContentType.JSON)
@@ -213,10 +215,10 @@ public class ContactStepDef extends BaseClass {
     @Given("I prepare request structure to search contact")
     public void iPrepareRequestStructureToSearchContact() {
         RestAssured.useRelaxedHTTPSValidation();
-        requestSpecification = RestAssured.given();
+        requestSpecification = given();
         requestSpecification.baseUri("https://webtesting.agilecrm.com")
                 .basePath("/dev/api")
-                .header("Accept", ContentType.JSON)
+                .header("Accept", ContentType.XML)
                 .auth().basic("apitesting@yopmail.com", "jabhmj91tibtjpsnijbs63lere")
                 .log()
                 .all();
@@ -226,5 +228,55 @@ public class ContactStepDef extends BaseClass {
 
     @Then("I verify the contact should be listed in the response")
     public void iVerifyTheContactShouldBeListedInTheResponse() {
+    }
+
+    @Then("I verify the get all contact response")
+    public void iVerifyTheGetAllContactResponse() {
+
+/*
+        given()
+                .baseUri("")
+                .basePath("")
+                .auth().basic("", "")
+                .log().all()
+        .when()
+                .get()
+        .then()
+                .body(hasXpath("collection.contact[0].properties[1].value"), equals("First Name"));
+*/
+
+
+        // get all contact ids
+       List<String> contactIds= response.body().xmlPath().getList("collection.contact.id");
+//        System.out.println(contactIds);
+
+        //get total contact size
+       int contactSize = response.body().xmlPath().getList("collection.contact").size();
+
+       for(int i=0 ; i<contactSize ; i++){
+           // get properties of contact
+           List<String> properties= response.body().xmlPath().getList("collection.contact["+i+"].properties");
+//           System.out.println(properties);
+
+           // identify the size of properties tags in contact
+           int propertiesSize = properties.size();
+
+           for(int j =0; j<propertiesSize; j++){
+               // get the property tag control based on index
+               String nameTag = response.body().xmlPath().getString("collection.contact["+i+"].properties["+j+"].name");
+
+               //check if the name tag value is first_name then get the value tag value and break the loop
+               if(nameTag.equals("first_name")){
+                   String valueTag=response.body().xmlPath().getString("collection.contact["+i+"].properties["+j+"].value");
+                   System.out.println(valueTag);
+                   break;
+               }
+           }
+
+       }
+
+
+
+
     }
 }

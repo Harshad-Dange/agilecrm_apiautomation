@@ -81,14 +81,14 @@ Feature: Verify contact functionality
     Then I print all contact info who is not associated to company
 
 
-    @SearchContact
-    Scenario: Search contact information
-      Given I prepare request structure to search contact
-      When I hit an api
-        | endpoint   | search |
-        | queryParam | q:cyber,type:PERSON |
-        | httpMethod | GET      |
-      Then I verify the contact should be listed in the response
+  @SearchContact
+  Scenario: Search contact information
+    Given I prepare request structure to search contact
+    When I hit an api
+      | endpoint   | search              |
+      | queryParam | q:cyber,type:PERSON |
+      | httpMethod | GET                 |
+    Then I verify the contact should be listed in the response
 
 
 
@@ -96,6 +96,15 @@ Feature: Verify contact functionality
       #Verify create contact response
       #get contact by id
       #verify get contact by id api response with request body of create contact
+
+
+  @GetAllContact
+  Scenario: Verify get all contact info in xml format
+    Given I prepare request structure to search contact
+    When I hit an api
+      | endpoint   | contacts |
+      | httpMethod | GET      |
+    Then I verify the get all contact response
 
 
 
