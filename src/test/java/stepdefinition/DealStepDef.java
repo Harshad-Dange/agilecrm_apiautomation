@@ -204,4 +204,30 @@ public class DealStepDef {
 
 
     }
+
+    @Given("I prepare request structure to get all deals")
+    public void iPrepareRequestStructureToGetAllDeals() {
+
+        RestAssured.useRelaxedHTTPSValidation();
+        requestSpecification = RestAssured.given();
+        requestSpecification.baseUri("https://webtesting.agilecrm.com")
+                .basePath("/dev/api")
+                .header("Accept", ContentType.JSON)
+                .auth().basic("apitesting@yopmail.com", "jabhmj91tibtjpsnijbs63lere")
+                .log().all();
+        response = requestSpecification.get("/opportunity");
+        response.prettyPrint();
+    }
+
+    @Then("Verify get all deals api response using deserialization")
+    public void verifyGetAllDealsApiResponseUsingDeserialization() {
+        Assert.assertEquals(200, response.statusCode());
+
+        // getting all deal objects and adding into DealResponseDto array   --> List<DealResponseDto>
+        DealResponseDto[] dealResponseDto=response.as(DealResponseDto[].class);
+        for(DealResponseDto dealDto : dealResponseDto){
+            // print id and name of all the deals
+            System.out.println("Deal Id : "+ dealDto.getId() + " Deal Name: "+ dealDto.getName());
+        }
+    }
 }

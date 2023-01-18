@@ -1,7 +1,9 @@
 package com.agilecrm.types;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class DealResponseDto {
@@ -40,7 +42,16 @@ public class DealResponseDto {
     private List<Object> tagsWithTime;
     private OwnerDto owner;
 
+    @JsonProperty("cursor")
+    public String getCursor() {
+        return cursor;
+    }
 
+    public void setCursor(String cursor) {
+        this.cursor = cursor;
+    }
+
+    private String cursor;
 
     private List<Object> contacts;
 

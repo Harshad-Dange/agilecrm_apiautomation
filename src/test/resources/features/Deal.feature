@@ -39,6 +39,11 @@ Feature: Verify deal feature
 #      | Deal2 | 500.0f        | 100         | Proposal  |            | Group Size, 10 |
 
 
+  @GetAllDeal
+  Scenario: Deserialization of get deal api
+    Given I prepare request structure to get all deals
+    Then Verify get all deals api response using deserialization
+
 
 
 

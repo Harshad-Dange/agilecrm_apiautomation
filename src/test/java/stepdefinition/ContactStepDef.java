@@ -7,14 +7,18 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
+import io.restassured.filter.session.SessionFilter;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
 
 public class ContactStepDef extends BaseClass {
 
@@ -22,6 +26,7 @@ public class ContactStepDef extends BaseClass {
     Response response;
     Long id;
     String email= null;
+    SessionFilter filter;
     @Given("I prepare request structure to get the contact")
     public void iPrepareRequestStructureToGetTheContact(Map<String, String> table) {
         //RequestSpecification --> is a interface
@@ -214,12 +219,14 @@ public class ContactStepDef extends BaseClass {
 
     @Given("I prepare request structure to search contact")
     public void iPrepareRequestStructureToSearchContact() {
+        filter= new SessionFilter();
         RestAssured.useRelaxedHTTPSValidation();
         requestSpecification = given();
         requestSpecification.baseUri("https://webtesting.agilecrm.com")
                 .basePath("/dev/api")
                 .header("Accept", ContentType.XML)
                 .auth().basic("apitesting@yopmail.com", "jabhmj91tibtjpsnijbs63lere")
+                .filter(filter)
                 .log()
                 .all();
 
@@ -232,9 +239,7 @@ public class ContactStepDef extends BaseClass {
 
     @Then("I verify the get all contact response")
     public void iVerifyTheGetAllContactResponse() {
-
-/*
-        given()
+        /*given()
                 .baseUri("")
                 .basePath("")
                 .auth().basic("", "")
@@ -242,9 +247,13 @@ public class ContactStepDef extends BaseClass {
         .when()
                 .get()
         .then()
-                .body(hasXpath("collection.contact[0].properties[1].value"), equals("First Name"));
+                .body(hasXPath("collection/contact[1]/id", equalTo("4548918478438400")));
 */
+            // verify id of the first contact
+            response.then().body(hasXPath("/collection/contact[1]/id", equalTo("4548918478438400")));
 
+            // verify first name of first contact
+            response.then().body(hasXPath("/collection/contact[1]/first_name", containsString("first_name")));
 
         // get all contact ids
        List<String> contactIds= response.body().xmlPath().getList("collection.contact.id");
