@@ -24,7 +24,12 @@ Feature: This is a sample feature
 #    Then I verify the contact is created successfully
 #      | first_name | <firstName> |
 
-  @Upload
-  Scenario: Verify create company feature
-    Given I create company in the system
+  @Download
+  Scenario: download
+    Given I download the file
     Then I verify the company is created successfully
+
+
+  @mockserver
+  Scenario: download
+    Given I setup wiremock server

@@ -1,31 +1,35 @@
 package stepdefinition;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.*;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.xml.HasXPath;
 import org.junit.Assert;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasXPath;
 
 public class SampleStepDef {
     int sum;  //30
+    Response response;
+    RequestSpecification requestSpecification;
 
     @Given("I have 2 numbers")
     public void totalNum() {
@@ -98,20 +102,55 @@ public class SampleStepDef {
         System.out.println("verify the company created successfully");
     }
 
-    @Given("I upload the file")
+    @Given("I download the file")
     public void iUploadTheFile() throws IOException {
-        InputStream inputStream=given().relaxedHTTPSValidation()
-                .baseUri("https://github.com/agilecrm/rest-api/raw/master/api/AgileCRMapi.png")
+        byte [] byteArray = given().relaxedHTTPSValidation()
+                .baseUri("https://github.com/DataTalksClub/data-engineering-zoomcamp/raw/main/images/aws/iam.png")
                 .log().all()
-        .when()
+                .when()
+                .get().asByteArray();
+
+        FileOutputStream fileOutputStream = new FileOutputStream("src/test/resources/iam.png");
+        fileOutputStream.write(byteArray);
+        fileOutputStream.close();
+//        IOUtils.closeQuietly(inputStream);
+
+        InputStream inputStream = given().relaxedHTTPSValidation()
+                .baseUri("https://github.com/DataTalksClub/data-engineering-zoomcamp/raw/main/images/aws/iam.png")
+                .log().all()
+                .when()
                 .get().asInputStream();
+        byte [] inoutArray = new  byte[inputStream.available()];
+        FileOutputStream  outputStream = new FileOutputStream("src/test/resources/iam1.png");
+        inputStream.read(inoutArray);
+        outputStream.write(inoutArray);
 
-        ByteArrayOutputStream byteArrayOutputStream= new ByteArrayOutputStream();
-        IOUtils.copy(inputStream,byteArrayOutputStream);
-        IOUtils.closeQuietly(byteArrayOutputStream);
-        IOUtils.closeQuietly(inputStream);
+        outputStream.close();
 
+    }
 
+    @Given("I setup wiremock server")
+    public void iSeupWiremockServer() {
+        WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().port(8080) );
+        wireMockServer.start();
+        stubFor(post("/maps")
+                .willReturn(jsonResponse("{\n" +
+                        "    \"request\": {\n" +
+                        "        \"method\": \"GET\",\n" +
+                        "        \"url\": \"/some/thing\"\n" +
+                        "    },\n" +
+                        "    \"response\": {\n" +
+                        "        \"status\": 200,\n" +
+                        "        \"statusMessage\": \"Everything was just fine!\"\n" +
+                        "    }\n" +
+                        "}", 200))
 
+        );
+        RestAssured.useRelaxedHTTPSValidation();
+        requestSpecification= RestAssured.given();
+        response=requestSpecification.baseUri("http://localhost:8080/")
+                .log().all()
+                .post("/maps");
+        response.prettyPrint();
     }
 }
