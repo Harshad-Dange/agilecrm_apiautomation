@@ -10,9 +10,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building project...'
-                // e.g. for Maven:
-                // bat 'mvn clean install'
+                echo 'Building project...
+                bat 'mvn clean install'
             }
         }
 
