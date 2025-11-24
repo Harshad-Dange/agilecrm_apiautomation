@@ -32,17 +32,6 @@ pipeline {
                 sh 'mvn package' // creates JAR/WAR in target/
             }
         }
-        stage('Archive Artifacts') {
-            steps {
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-            }
-         }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deployment logic goes here...'
-            }
-        }
     }
      post {
             success {
