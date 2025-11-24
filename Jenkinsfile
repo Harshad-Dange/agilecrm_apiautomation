@@ -29,7 +29,7 @@ pipeline {
 
         stage('Package') {
             steps {
-                sh 'mvn package' // creates JAR/WAR in target/
+                bat 'mvn package' // creates JAR/WAR in target/
             }
         }
     }
